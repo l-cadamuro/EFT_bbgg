@@ -41,3 +41,12 @@ The folder ``analysis_scripts`` contains tools to characterize the EFT workspace
 - ``make_acceptance_from_ws_klambda.py`` does the same as above but from the parametric legacy workspace. Usage : ``python make_acceptance_from_ws_klambda.py --input ../../database/workspaces/NonResonant_Wisconsin/legacy_h027_stat_only/workspaces/WS-bbyy-non-resonant_param.root --do-yield --export klambda_yield.pkl``
 
 - ``compare_yields_klambda_chhh.py`` make a comparison between the chhh and klambda parametrised yields. To use, first export the chhh yields (use ``--do-yield --export chhh_yield.pkl``)  with other POIs at SM, and then ``python compare_yields_klambda_chhh.py``
+
+
+## Making results
+
+All scripts to make results are in the ``results_scripts/`` folder.
+
+### Upper limit scan
+
+To make the scan with quickstats: use the ``limit_scan`` command and then plot the results with ``make_EFT_limit_scan.py`` . The script ``make_all_limits_scans.sh`` lists the commands for the generation and plotting of the data.

@@ -34,7 +34,7 @@ This will create a new folder named ``workspace`` with the ROOT workspace file.
 
 ## Verification of the workspace
 
-The folder ``analyse`` contains tools to characterize the EFT workspace:
+The folder ``analysis_scripts`` contains tools to characterize the EFT workspace:
 
 - ``make_acceptance_from_ws.py`` uses the functions for the yield scalings to plot yield or acceptance as function of a given POI. Example of usage ``python make_acceptance_from_ws.py --input ../EFT_workspaces/workspace/WS-bbyy-non-resonant_non_param.root --poi chhh`` (see ``--help`` for other options. Note that with ``--other-pois ctth=1 cgghh=2`` you can make the plot under other POI configurations. Anything unspecified is fixed at the SM expectation.)
 

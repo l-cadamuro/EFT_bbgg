@@ -27,7 +27,7 @@ categs = [
     'BSM_4',
 ]
 
-# path to the folder just above "config"
+# path to the input folder just above "config" : original cards to modify
 path_to = '/homeijclab/cadamuro/HH/gitCode/database/workspaces/NonResonant_Wisconsin/legacy_h027_stat_only'
 
 cards = {
@@ -53,82 +53,17 @@ folder_forward = [
     (f'{path_to}/config/data', f'{config_subdir}/data'),
 ]
 
-
 print('[INFO] will save output into', out_dir)
 
 if not os.path.isdir(out_dir+'/'+config_subdir+'/'+categs_subdir):
     print('[INFO] creating folders', out_dir+'/'+config_subdir+'/'+categs_subdir)
     os.makedirs(out_dir+'/'+config_subdir+'/'+categs_subdir)
 
-# if not os.path.isdir(out_dir):
-#     print('[INFO] creating folder', out_dir)
-#     os.makedirs(out_dir)
-# if not os.path.isdir(out_dir+'/'+config_subdircards_subdir):
-#     print('[INFO] creating folder', out_dir+'/'+cards_subdir)
-#     os.makedirs(out_dir+'/'+cards_subdir)
-# for dstart, ddest in folder_forward:
-#     if not os.path.isdir(out_dir+'/'+ddest):
-#         print('[INFO] creating folder', out_dir+'/'+ddest)
-#         os.makedirs(out_dir+'/'+ddest)
+# the descritpion of the polynomial (prototype string)
+from HEFT_poly import poly_form, read_coeffs_ATLAS
+mhh_bins_files, coeffs, last_line = read_coeffs_ATLAS('coeff_files/NLO-Ais-13TeV.txt', 23)
 
-# <Sample Name="ggHH_250" InputFile="config/HH_bbgg_HEFT_workspace/model/signal_pdf_ggHH_HHyybb_mu_looseScore_HMass_1.xml" ImportSyst=":common:,ggHH" SharePdf="Sig_ggHH" MultiplyLumi="true">
-#   <NormFactor Name="mu[1,-10,200]"/>
-#   <NormFactor Name="mu_ggHH[1,-10,200]"/>
-#   <NormFactor Name="yield_ggHH_250[0]"/>
-#   <NormFactor Name="expr::poly250('(0.0343628*@1*@1*@1*@1 + 0.12094*@2*@2 + (0.0276386*@1*@1 + 0.0388548*@3*@3)*@0*@0 + 0.171954*@4*@4 + (-0.128178*@2 + -0.0612458*@1*@0)*@1*@1 + (0.115241*@1*@0 + 0.137035*@3*@0)*@2 + 0.288257*@2*@4 + (-0.0720075*@3*@0 + -0.151618*@4)*@1*@1 + (0.0655087*@0*@3 + 0.137107*@4)*@1*@0 + 0.163392*@3*@4*@0 + -0.000363312*@3*@1*@1*@1 + 0.00066654*@2*@1*@3 + 0.00142309*@1*@0*@3*@3 + 0.000861283*@1*@3*@4 + -0.00110765*@1*@1*@3*@3 + 0.00203213*@2*@3*@3 + 0.00129149*@0*@3*@3*@3 + 0.00262585*@4*@3*@3)/0.000755673',chhh,ctth,ctthh,cggh,cgghh)"/>
- 
-# expr::poly250('(0.0343628*@1*@1*@1*@1 + 0.12094*@2*@2 + (0.0276386*@1*@1 + 0.0388548*@3*@3)*@0*@0 + 0.171954*@4*@4 + (-0.128178*@2 + -0.0612458*@1*@0)*@1*@1 + (0.115241*@1*@0 + 0.137035*@3*@0)*@2 + 0.288257*@2*@4 + (-0.0720075*@3*@0 + -0.151618*@4)*@1*@1 + (0.0655087*@0*@3 + 0.137107*@4)*@1*@0 + 0.163392*@3*@4*@0 + -0.000363312*@3*@1*@1*@1 + 0.00066654*@2*@1*@3 + 0.00142309*@1*@0*@3*@3 + 0.000861283*@1*@3*@4 + -0.00110765*@1*@1*@3*@3 + 0.00203213*@2*@3*@3 + 0.00129149*@0*@3*@3*@3 + 0.00262585*@4*@3*@3)/0.000755673',chhh,ctth,ctthh,cggh,cgghh)
-# 0,1,2,3,4 : chhh,ctth,ctthh,cggh,cgghh
-# from 
-poly_form = (
-"{A1}*{ctth}*{ctth}*{ctth}*{ctth} +"
-"{A2}*{ctthh}*{ctthh} +"
-"({A3}*{ctth}*{ctth} + {A4}*{cggh}*{cggh})*{chhh}*{chhh} +"
-"{A5}*{cgghh}*{cgghh} +"
-"({A6}*{ctthh} + {A7}*{ctth}*{chhh})*{ctth}*{ctth} +"
-"({A8}*{ctth}*{chhh} + {A9}*{cggh}*{chhh})*{ctthh} +"
-"{A10}*{ctthh}*{cgghh} +"
-"({A11}*{cggh}*{chhh} + {A12}*{cgghh})*{ctth}*{ctth} +"
-"({A13}*{chhh}*{cggh} + {A14}*{cgghh})*{ctth}*{chhh} +"
-"{A15}*{cggh}*{cgghh}*{chhh} +"
-"{A16}*{cggh}*{ctth}*{ctth}*{ctth} +"
-"{A17}*{ctthh}*{ctth}*{cggh} +"
-"{A18}*{ctth}*{chhh}*{cggh}*{cggh} +"
-"{A19}*{ctth}*{cggh}*{cgghh} +"
-"{A20}*{ctth}*{ctth}*{cggh}*{cggh} +"
-"{A21}*{ctthh}*{cggh}*{cggh} +"
-"{A22}*{chhh}*{cggh}*{cggh}*{cggh} +"
-"{A23}*{cgghh}*{cggh}*{cggh}"
-)
-
-####################################################
-def read_coeffs_ATLAS(fname, nAi):
-    """ read the coefficients in the ATLAS format """
-    fIn = open(fname, 'r')
-    bins = []
-    data = []
-    for l in fIn:
-        l = l.strip()
-        if not l:
-            continue
-        tokens = l.split()
-        tokens = [float(i) for i in tokens]
-        if len(tokens) == nAi + 1: ## coeffs + mHH bin center
-            # data.append(tokens)
-            bins.append(tokens[0])
-            data.append(tokens[1:])
-        elif len(tokens) == nAi: ## the last line seems to be an overflow bin
-            # data.append([999999,] + tokens)
-            bins.append(999999,)
-            data.append(tokens)
-
-        else:
-            raise RuntimeError("Cannot parse coefficients")
-    return bins, data
-
-mhh_bins_files, coeffs = read_coeffs_ATLAS('coeff_files/NLO-Ais-13TeV.txt', 23)
-
-if mhh_bins_files[:-1] != mHH_bins: # mhh_bins_files also contains an overflow entry at 999999
+if mhh_bins_files != mHH_bins:
     print('WARNING!!! coeffs read out and mHH_bins do not match! ', len(mHH_bins), len(mhh_bins_files))
     for i in range(len(mhh_bins_files)):
         print(mHH_bins[i], mhh_bins_files[i])
@@ -180,7 +115,7 @@ for ibin, mHH in enumerate(mHH_bins):
 #               : S = poly(A_0, c_i) x yield_0 x pdf + poly(A_1, c_i) x yield_1 x pdf + ...
 # merged_yields : a single signal (sum(yields) x pdf) is created. Partial contributions are aggregated
 #               : S = sum_Ncoeffs [sum_bins(Ai x yield_i)] poly_term_j ]
-implementation_type = 'split_signals' #split_signals, merged_yields
+implementation_type = 'merged_yields'
 
 newcards = {}
 ####################################################
@@ -247,8 +182,35 @@ for categ in categs:
             new_card += newstrs
 
     elif implementation_type == 'merged_yields':
-        for ibin, mHH in enumerate(mHH_bins):
-            pass
+        protos =   [
+            '  <Sample Name="HH_ggF" XSection="1" SelectionEff="1" InputFile="config/models/HH_ggF_{categ}.xml" ImportSyst=":common:,HH_ggF" MultiplyLumi="1">\n',
+            # '    <NormFactor Name="yield_HH_ggF[{evtyield}]" />\n',
+            '    <NormFactor Name="mu_XS_HH_ggF[1]" />\n',
+            '    <NormFactor Name="mu_XS_HH[1]" />\n',
+            '    <NormFactor Name="mu_XS_HH_{categ}[1]" />\n',
+            '    <NormFactor Name="mu_XS_{categ}[1]" />\n',
+            '    <NormFactor Name="mu[1]" />\n',
+            # '    <NormFactor Name="expr::yield_EFT(\'({polyfunc})/{SMnorm}\',{chhh},{ctth},{ctthh},{cggh},{cgghh})"/>\n'
+            '    <NormFactor Name="expr::yield_HH_ggF_EFT(\'{polyfunc}\',{chhh},{ctth},{ctthh},{cggh},{cgghh})"/>\n'
+            '  </Sample>\n',
+        ]
+        from HEFT_poly import ci_func_vector, coeffs_vector
+
+        poly_parts = []
+        for ifunc, func in enumerate(ci_func_vector): # looping on each "piece" of the polynomial
+            tot = 0
+            # building A0_bin0 x yield_bin0 / SMyield_bin0 + ... + A0_binM x yield_binM / SMyield_binM +
+            for ibin, mHH in enumerate(mHH_bins):
+                tot += coeffs[ibin][ifunc] * yields[categ][mHH] / SM_yields[mHH]
+            poly_parts.append(tot)
+        formatdata = {
+            'categ'    : categ,
+            'polyfunc' : format_poly(poly_form, poly_parts, {'chhh':'@0', 'ctth':'@1', 'ctthh':'@2', 'cggh':'@3', 'cgghh':'@4'})
+        }
+        formatdata = {**formatdata, **poi_names}
+        newstrs = [x.format(**formatdata) for x in protos]
+        new_card += newstrs
+
 
     ##########################################################################
 

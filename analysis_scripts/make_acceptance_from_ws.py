@@ -8,6 +8,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--input', required=True, help='input workspace root file')
 parser.add_argument('--WS', default='combWS', help='input workspace name')
 parser.add_argument('--poi', required=True, help="scanned poi (reported on x-axis of the plot)")
+parser.add_argument('--impl-type', help="how the EFT scaling is implemented (split_signals or merged_yields)- needed to lookup properly the signal", default='split_signals')
 parser.add_argument('--x-min', default=None, help="scanned poi range - min value (defaults are chosen depending on POI for SM config)")
 parser.add_argument('--x-max', default=None, help="scanned poi range - max value (defaults are chosen depending on POI for SM config)")
 parser.add_argument('--x-step', default=100, help="scanned poi range - number of steps to perform in range (will do N+1 to include endpoint)")
@@ -87,29 +88,38 @@ cgghh = ws.var('cgghh')
 
 categs = ['SM_1', 'SM_2', 'SM_3', 'BSM_1', 'BSM_2', 'BSM_3', 'BSM_4']
 print(f'[INFO] : the following categories are searched: {categs}')
-mHH_bins = [
-    250, 270,290,310,330,350,370,390,
-    410,430,450,470,490,
-    510,530,550,570,590,
-    610,630,650,670,690,
-    710,730,750,770,790,
-    810,830,850,870,890,
-    910,930,950,970,990,
-    1010,1030
-]
-print(f'[INFO] : the are {len(mHH_bins)} considered, first edge = {mHH_bins[0]}, last edge = {mHH_bins[-1]}')
 
-# yields are named like this
-# yield__HH_ggF_250_SM_2
+print(f'[INFO] : the yield will be fetched assuming the EFT scaling is implemented as : {args.impl_type}')
+if args.impl_type == 'split_signals': # in this case you need to lookup all the yield individually
+    mHH_bins = [
+        250, 270,290,310,330,350,370,390,
+        410,430,450,470,490,
+        510,530,550,570,590,
+        610,630,650,670,690,
+        710,730,750,770,790,
+        810,830,850,870,890,
+        910,930,950,970,990,
+        1010,1030
+    ]
+    print(f'[INFO] : the are {len(mHH_bins)} considered, first edge = {mHH_bins[0]}, last edge = {mHH_bins[-1]}')
 
-yield_name_proto = 'yield__HH_ggF_{bin}_{categ}'
-print(f'[INFO] : yields expressions are searched for as {yield_name_proto}')
+    # yields are named like this
+    # yield__HH_ggF_250_SM_2
 
-yields_funcs = {}
-for c in categs:
-    yields_funcs[c] = {}
-    for m in mHH_bins:
-        yields_funcs[c][m] = ws.function(yield_name_proto.format(bin=m, categ=c)) # get yield by doing getVal()
+    yield_name_proto = 'yield__HH_ggF_{bin}_{categ}'
+    print(f'[INFO] : yields expressions are searched for as {yield_name_proto}')
+
+    yields_funcs = {}
+    for c in categs:
+        yields_funcs[c] = {}
+        for m in mHH_bins:
+            yields_funcs[c][m] = ws.function(yield_name_proto.format(bin=m, categ=c)) # get yield by doing getVal()
+
+elif args.impl_type == 'merged_yields':
+    yield_name_proto = 'yield_HH_ggF_EFT_{categ}'
+    yields_funcs = {}
+    for c in categs:
+        yields_funcs[c] = ws.function(yield_name_proto.format(categ=c))
 
 import numpy as np
 xmin = pois_ranges[args.poi][0] if not args.x_min else args.x_min
@@ -141,9 +151,12 @@ for sp in scan_points:
     roofit_pois[args.poi].setVal(sp)
     yields[sp] = {}
     for c in categs:
-        yields[sp][c] = {}
-        for m in mHH_bins:
-            yields[sp][c][m] = yields_funcs[c][m].getVal()
+        if args.impl_type == 'split_signals':
+            yields[sp][c] = {}
+            for m in mHH_bins:
+                yields[sp][c][m] = yields_funcs[c][m].getVal()
+        elif args.impl_type == 'merged_yields':
+            yields[sp][c] = yields_funcs[c].getVal()
 
 def poly(ctthh, cgghh, cggh, chhh, ctth, A):
     ct = ctth
@@ -239,7 +252,10 @@ curves['xdata'] = scan_points
 for c in categs:
     data_points = [] # store yield for this category in steps of poi
     for x in scan_points:
-        ytot = sum(yields[x][c].values())
+        if args.impl_type == 'split_signals':
+            ytot = sum(yields[x][c].values())
+        elif args.impl_type == 'merged_yields':
+            ytot = yields[x][c]
         data_points.append(ytot)
         # print(data_points)
     data_points = np.asarray(data_points)

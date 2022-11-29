@@ -20,6 +20,8 @@ Then xml workspace description files are converted running the script ``modify_x
 - Ai coefficient files (stored in ``coeff_files``)
 - the yields per mHH bin (read from the previous step)
 
+The workspace can be built as n_mHHbins independent signals (all with the same CrystalBallPDF in a given category), or as a single signal composed as sum(yields) x CrystalBallPDF in a given category.
+Select the behaviour with ``implementation_type = 'split_signals'`` (first case) or ``implementation_type = 'merged_yields'`` (second case).
 
 ## Compiling the workspace
 
@@ -36,7 +38,7 @@ This will create a new folder named ``workspace`` with the ROOT workspace file.
 
 The folder ``analysis_scripts`` contains tools to characterize the EFT workspace:
 
-- ``make_acceptance_from_ws.py`` uses the functions for the yield scalings to plot yield or acceptance as function of a given POI. Example of usage ``python make_acceptance_from_ws.py --input ../EFT_workspaces/workspace/WS-bbyy-non-resonant_non_param.root --poi chhh`` (see ``--help`` for other options. Note that with ``--other-pois ctth=1 cgghh=2`` you can make the plot under other POI configurations. Anything unspecified is fixed at the SM expectation.)
+- ``make_acceptance_from_ws.py`` uses the functions for the yield scalings to plot yield or acceptance as function of a given POI. Example of usage ``python make_acceptance_from_ws.py --input ../EFT_workspaces/workspace/WS-bbyy-non-resonant_non_param.root --poi chhh`` (see ``--help`` for other options. Note that with ``--other-pois ctth=1 cgghh=2`` you can make the plot under other POI configurations. Anything unspecified is fixed at the SM expectation.)  . To instruct the code how to lookup the yields (single one or merged, depending on how it was created, see above) use ``--impl-type split_signals`` or ``--impl-type merged_yields``. Make all plots with ``make_all_acceptance_from_ws.sh``
 
 - ``make_acceptance_from_ws_klambda.py`` does the same as above but from the parametric legacy workspace. Usage : ``python make_acceptance_from_ws_klambda.py --input ../../database/workspaces/NonResonant_Wisconsin/legacy_h027_stat_only/workspaces/WS-bbyy-non-resonant_param.root --do-yield --export klambda_yield.pkl``
 

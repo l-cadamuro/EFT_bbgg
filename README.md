@@ -14,7 +14,7 @@ You first need to determine the yield for each mHH bin. This is done with the sc
 
 The input ntuples can be downloaded from : ``/eos/user/c/chlcheng/analysis/bbyy/VBF_optimization/preselected_h027_01_04_2022/outputs/h027_final_legacy/minitrees``.
 
-Then xml workspace description files are converted with the script ``modify_xml_cards.py``. This script uses the following input:
+Then xml workspace description files are converted running the script ``modify_xml_cards.py`` (no command line options needed, all is configured in the script body). This script uses the following input:
 
 - xml input cards (path set in the script)
 - Ai coefficient files (stored in ``coeff_files``)
@@ -46,7 +46,13 @@ The folder ``analysis_scripts`` contains tools to characterize the EFT workspace
 ## Making results
 
 All scripts to make results are in the ``results_scripts/`` folder.
+Most of the methods of quickstats are taken from [this tutorial](https://gitlab.cern.ch/clcheng/bbyy_analysis_framework/-/blob/master/notebooks/T15-StatEvaluationFromWorkspace.ipynb) 
 
 ### Upper limit scan
 
 To make the scan with quickstats: use the ``limit_scan`` command and then plot the results with ``make_EFT_limit_scan.py`` . The script ``make_all_limits_scans.sh`` lists the commands for the generation and plotting of the data.
+
+### Likelihood scan
+
+First you need to generate the Asimov dataset (``quickstats generate_asimov``), and then you can fit it with ``quickstats likelihood_scan`` and plot with ``make_likelihood_scan.py``.
+The script ``make_all_likelihood_scans.sh`` lists the commands for the generation and plotting of the data.

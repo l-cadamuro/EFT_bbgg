@@ -176,7 +176,11 @@ for ibin, mHH in enumerate(mHH_bins):
     p_string = eval(s, SM_vals)
     SM_yields[mHH] = p_string
 
-
+# split_signals : one signal (yield x pdf) is created for each mHH bin, the pdf is common
+#               : S = poly(A_0, c_i) x yield_0 x pdf + poly(A_1, c_i) x yield_1 x pdf + ...
+# merged_yields : a single signal (sum(yields) x pdf) is created. Partial contributions are aggregated
+#               : S = sum_Ncoeffs [sum_bins(Ai x yield_i)] poly_term_j ]
+implementation_type = 'split_signals' #split_signals, merged_yields
 
 newcards = {}
 ####################################################
@@ -214,29 +218,39 @@ for categ in categs:
     else:
         raise RuntimeError(f'first same location inconsistent : {i_firstSample} {istart}')
 
-    for ibin, mHH in enumerate(mHH_bins):
-        mHH_int = int(mHH)
-        protos =   [
-            '  <Sample Name="{signame}" XSection="1" SelectionEff="1" InputFile="config/models/HH_ggF_BSM_4.xml" ImportSyst=":common:,{signame}" MultiplyLumi="1">\n',
-            '    <NormFactor Name="yield_{signame}[{evtyield}]" />\n',
-            '    <NormFactor Name="mu_XS_HH_ggF[1]" />\n',
-            '    <NormFactor Name="mu_XS_HH[1]" />\n',
-            '    <NormFactor Name="mu_XS_HH_BSM_4[1]" />\n',
-            '    <NormFactor Name="mu_XS_BSM_4[1]" />\n',
-            '    <NormFactor Name="mu[1]" />\n',
-            '    <NormFactor Name="expr::{polyname}(\'({polyfunc})/{SMnorm}\',{chhh},{ctth},{ctthh},{cggh},{cgghh})"/>\n'
-            '  </Sample>\n',
-        ]
-        formatdata = {
-            'signame'  : f'HH_ggF_{mHH_int}',
-            'evtyield' : yields[categ][mHH],
-            'polyname' : f'poly{mHH_int}',
-            'SMnorm'   : SM_yields[mHH],
-            'polyfunc' : format_poly(poly_form, coeffs[ibin], {'chhh':'@0', 'ctth':'@1', 'ctthh':'@2', 'cggh':'@3', 'cgghh':'@4'})
-        }
-        formatdata = {**formatdata, **poi_names}
-        newstrs = [x.format(**formatdata) for x in protos]
-        new_card += newstrs
+    ##########################################################################
+
+    if implementation_type == 'split_signals':
+        for ibin, mHH in enumerate(mHH_bins):
+            mHH_int = int(mHH)
+            protos =   [
+                '  <Sample Name="{signame}" XSection="1" SelectionEff="1" InputFile="config/models/HH_ggF_{categ}.xml" ImportSyst=":common:,{signame}" MultiplyLumi="1">\n',
+                '    <NormFactor Name="yield_{signame}[{evtyield}]" />\n',
+                '    <NormFactor Name="mu_XS_HH_ggF[1]" />\n',
+                '    <NormFactor Name="mu_XS_HH[1]" />\n',
+                '    <NormFactor Name="mu_XS_HH_{categ}[1]" />\n',
+                '    <NormFactor Name="mu_XS_{categ}[1]" />\n',
+                '    <NormFactor Name="mu[1]" />\n',
+                '    <NormFactor Name="expr::{polyname}(\'({polyfunc})/{SMnorm}\',{chhh},{ctth},{ctthh},{cggh},{cgghh})"/>\n'
+                '  </Sample>\n',
+            ]
+            formatdata = {
+                'categ'    : categ,
+                'signame'  : f'HH_ggF_{mHH_int}',
+                'evtyield' : yields[categ][mHH],
+                'polyname' : f'poly{mHH_int}',
+                'SMnorm'   : SM_yields[mHH],
+                'polyfunc' : format_poly(poly_form, coeffs[ibin], {'chhh':'@0', 'ctth':'@1', 'ctthh':'@2', 'cggh':'@3', 'cgghh':'@4'})
+            }
+            formatdata = {**formatdata, **poi_names}
+            newstrs = [x.format(**formatdata) for x in protos]
+            new_card += newstrs
+
+    elif implementation_type == 'merged_yields':
+        for ibin, mHH in enumerate(mHH_bins):
+            pass
+
+    ##########################################################################
 
     ## finally forward everything else in the card
     new_card += all_lines[istop+1:]

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE Channel SYSTEM "AnaWSBuilder.dtd">
+<Channel Name="BSM_1" Type="shape" Lumi="1">
+  <Data InputFile="config/data/data_points_BSM_1.txt" FileType="ascii" Observable="atlas_invMass_BSM_1[105,160]" Binning="550" InjectGhost="1" BlindRange="120,130" />
+  <Item Name="chhh[0, -20, 20]"/>
+  <Item Name="ctth[1, -20, 20]"/>
+  <Item Name="ctthh[1, -20, 20]"/>
+  <Item Name="cggh[0, -20, 20]"/>
+  <Item Name="cgghh[0, -20, 20]"/>
+  <Sample Name="HH_ggF" XSection="1" SelectionEff="1" InputFile="config/models/HH_ggF_BSM_1.xml" ImportSyst=":common:,HH_ggF" MultiplyLumi="1">
+    <NormFactor Name="mu_XS_HH_ggF[1]" />
+    <NormFactor Name="mu_XS_HH[1]" />
+    <NormFactor Name="mu_XS_HH_BSM_1[1]" />
+    <NormFactor Name="mu_XS_BSM_1[1]" />
+    <NormFactor Name="mu[1]" />
+    <NormFactor Name="expr::yield_HH_ggF_EFT('0.25428579582558264*@1*@1*@1*@1 +0.9101197784842969*@2*@2 +0.10955071134071319*@1*@1*@0*@0 +0.14491607503942097*@3*@3*@0*@0 +1.113773182694234*@4*@4 +-0.9561278267081191*@2*@1*@1 +-0.31939093468565877*@1*@0*@1*@1 +0.6066923877497418*@1*@0*@2 +0.6819949798457492*@3*@0*@2 +1.9951126760741211*@2*@4  +-0.35496840854421907*@3*@0*@1*@1 +-1.0386346338000276*@4*@1*@1 +0.2507790872131433*@0*@3*@1*@0 +0.6823852953978816*@4 *@1*@0 +0.7774581550560986*@3*@4*@0 +-0.0016995055566222793*@3*@1*@1*@1 +0.0031628533342414203*@2*@1*@3 +0.004999847637797604*@1*@0*@3*@3 +0.0037638388329904247*@1*@3*@4 +-0.0053309124072681655*@1*@1*@3*@3 +0.009924010154713711*@2*@3*@3 +0.004370132133539157*@0*@3*@3*@3 +0.011780620025002648*@4*@3*@3',chhh,ctth,ctthh,cggh,cgghh)"/>
+  </Sample>
+  <Sample Name="HH_VBF" XSection="1" SelectionEff="1" InputFile="config/models/HH_VBF_BSM_1.xml" ImportSyst=":common:,HH_VBF" MultiplyLumi="1">
+    <NormFactor Name="yield_HH_VBF[0.0018086877783122055]" />
+    <NormFactor Name="mu_XS_HH_VBF[1]" />
+    <NormFactor Name="mu_XS_HH[1]" />
+    <NormFactor Name="mu_XS_HH_BSM_1[1]" />
+    <NormFactor Name="mu_XS_BSM_1[1]" />
+    <NormFactor Name="mu[1]" />
+  </Sample>
+  <Sample Name="ggH" XSection="1" SelectionEff="1" InputFile="config/models/ggH_BSM_1.xml" ImportSyst=":common:,ggH" MultiplyLumi="1">
+    <NormFactor Name="yield_ggH[0.4400080395462447]" />
+    <NormFactor Name="mu_XS_ggH[1]" />
+    <NormFactor Name="mu_XS_H[1]" />
+    <NormFactor Name="mu_XS_H_BSM_1[1]" />
+    <NormFactor Name="mu_XS_BSM_1[1]" />
+    <NormFactor Name="mu[1]" />
+  </Sample>
+  <Sample Name="VBF" XSection="1" SelectionEff="1" InputFile="config/models/VBF_BSM_1.xml" ImportSyst=":common:,VBF" MultiplyLumi="1">
+    <NormFactor Name="yield_VBF[0.0302947810531125]" />
+    <NormFactor Name="mu_XS_VBF[1]" />
+    <NormFactor Name="mu_XS_BSM_1[1]" />
+    <NormFactor Name="mu[1]" />
+  </Sample>
+  <Sample Name="WH" XSection="1" SelectionEff="1" InputFile="config/models/WH_BSM_1.xml" ImportSyst=":common:,WH" MultiplyLumi="1">
+    <NormFactor Name="yield_WH[0.014673759053913367]" />
+    <NormFactor Name="mu_XS_WH[1]" />
+    <NormFactor Name="mu_XS_H[1]" />
+    <NormFactor Name="mu_XS_H_BSM_1[1]" />
+    <NormFactor Name="mu_XS_BSM_1[1]" />
+    <NormFactor Name="mu[1]" />
+  </Sample>
+  <Sample Name="ZH" XSection="1" SelectionEff="1" InputFile="config/models/ZH_BSM_1.xml" ImportSyst=":common:,ZH" MultiplyLumi="1">
+    <NormFactor Name="yield_ZH[0.4816099396599713]" />
+    <NormFactor Name="mu_XS_ZH[1]" />
+    <NormFactor Name="mu_XS_H[1]" />
+    <NormFactor Name="mu_XS_H_BSM_1[1]" />
+    <NormFactor Name="mu_XS_BSM_1[1]" />
+    <NormFactor Name="mu[1]" />
+  </Sample>
+  <Sample Name="tHjb" XSection="1" SelectionEff="1" InputFile="config/models/tHjb_BSM_1.xml" ImportSyst=":common:,tHjb" MultiplyLumi="1">
+    <NormFactor Name="yield_tHjb[0.07611965372216364]" />
+    <NormFactor Name="mu_XS_tHjb[1]" />
+    <NormFactor Name="mu_XS_H[1]" />
+    <NormFactor Name="mu_XS_H_BSM_1[1]" />
+    <NormFactor Name="mu_XS_BSM_1[1]" />
+    <NormFactor Name="mu[1]" />
+  </Sample>
+  <Sample Name="tWH" XSection="1" SelectionEff="1" InputFile="config/models/tWH_BSM_1.xml" ImportSyst=":common:,tWH" MultiplyLumi="1">
+    <NormFactor Name="yield_tWH[0.01490000775788889]" />
+    <NormFactor Name="mu_XS_tWH[1]" />
+    <NormFactor Name="mu_XS_H[1]" />
+    <NormFactor Name="mu_XS_H_BSM_1[1]" />
+    <NormFactor Name="mu_XS_BSM_1[1]" />
+    <NormFactor Name="mu[1]" />
+  </Sample>
+  <Sample Name="ttH" XSection="1" SelectionEff="1" InputFile="config/models/ttH_BSM_1.xml" ImportSyst=":common:,ttH" MultiplyLumi="1">
+    <NormFactor Name="yield_ttH[0.7736260195863913]" />
+    <NormFactor Name="mu_XS_ttH[1]" />
+    <NormFactor Name="mu_XS_H[1]" />
+    <NormFactor Name="mu_XS_H_BSM_1[1]" />
+    <NormFactor Name="mu_XS_BSM_1[1]" />
+    <NormFactor Name="mu[1]" />
+  </Sample>
+  <Sample Name="background" XSection="1" SelectionEff="1" InputFile="config/models/background_BSM_1.xml" ImportSyst=":self:" MultiplyLumi="0">
+    <NormFactor Name="nbkg_BSM_1[10.0,0,10000000]" />
+  </Sample>
+</Channel>

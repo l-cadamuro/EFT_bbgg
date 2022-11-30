@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE Model SYSTEM "AnaWSBuilder.dtd">
+<Model Type="UserDef">
+  <ModelItem Name="EXPR::bkgPdf_SM_1('exp((@0-100)*@1/100)', :observable:,  BKG_p0_SM_1[-1,-1000,1000])" />
+</Model>

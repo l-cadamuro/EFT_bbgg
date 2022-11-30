@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE Combination SYSTEM "AnaWSBuilder.dtd">
+<Combination WorkspaceName="combWS" ModelConfigName="ModelConfig" DataName="combData" OutputFile="workspace/WS-bbyy-non-resonant_non_param.root" Blind="1">
+<Input>config/categories/EFT_SM_1.xml</Input>
+<Input>config/categories/EFT_SM_2.xml</Input>
+<Input>config/categories/EFT_SM_3.xml</Input>
+<Input>config/categories/EFT_BSM_1.xml</Input>
+<Input>config/categories/EFT_BSM_2.xml</Input>
+<Input>config/categories/EFT_BSM_3.xml</Input>
+<Input>config/categories/EFT_BSM_4.xml</Input>
+  <POI>mu_XS_H,mu_XS_HH,mu_XS_HH_SM_1,mu_XS_H_SM_1,mu_XS_SM_1,mu_XS_HH_SM_2,mu_XS_H_SM_2,mu_XS_SM_2,mu_XS_HH_SM_3,mu_XS_H_SM_3,mu_XS_SM_3,mu_XS_HH_BSM_1,mu_XS_H_BSM_1,mu_XS_BSM_1,mu_XS_HH_BSM_2,mu_XS_H_BSM_2,mu_XS_BSM_2,mu_XS_HH_BSM_3,mu_XS_H_BSM_3,mu_XS_BSM_3,mu_XS_HH_BSM_4,mu_XS_H_BSM_4,mu_XS_BSM_4,mu_XS_HH_ggF,mu_XS_HH_VBF,mu_XS_ggH,mu_XS_VBF,mu_XS_WH,mu_XS_ZH,mu_XS_tHjb,mu_XS_tWH,mu_XS_ttH,mu,ctth,ctthh,cgghh,cggh,chhh</POI>
+  <Asimov Name="setup" Setup="chhh=1,ctth=1,cgghh=0,cggh=0,ctthh=0,mu_XS_HH_ggF=1,mu_XS_HH_VBF=1,mu_XS_HH=1" Action="" />
+  <Asimov Name="POISnap" Setup="" Action="savesnapshot" SnapshotPOI="nominalPOI" />
+  <Asimov Name="NPSnap" Setup="mu=0" Action="fixsyst:fit:float:savesnapshot:nominalPOI" SnapshotNuis="nominalNuis" SnapshotGlob="nominalGlobs" />
+  <Asimov Name="asimovData_1" Setup="mu=1" Action="genasimov" />
+</Combination>

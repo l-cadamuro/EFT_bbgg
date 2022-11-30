@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE Model SYSTEM "AnaWSBuilder.dtd">
+<Model Type="UserDef" CacheBinning="100000">
+  <Item Name="mH[125.09]" />
+  <Item Name="expr::muCB_ggH('125.12958403972962-125+@0',mH)" />
+  <Item Name="expr::sigmaCB_ggH('1.683475817371973',mH)" />
+  <Item Name="expr::alphaCBLo_ggH('1.500219160598725',mH)" />
+  <Item Name="expr::alphaCBHi_ggH('1.8672383155613834',mH)" />
+  <Item Name="expr::nCBLo_ggH('33.049291604726896',mH)" />
+  <Item Name="expr::nCBHi_ggH('4.681113992480879',mH)" />
+  <ModelItem Name="RooTwoSidedCBShape::signal(:observable:, muCB_ggH, sigmaCB_ggH, alphaCBLo_ggH, nCBLo_ggH, alphaCBHi_ggH, nCBHi_ggH)" />
+</Model>

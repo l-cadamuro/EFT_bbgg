@@ -55,6 +55,17 @@ folder_forward = [
 
 print('[INFO] will save output into', out_dir)
 
+if os.path.isdir(out_dir):
+    print('[INFO] : directory', out_dir, 'exists. Do you want to delete it to continue? [Y/n]')
+    rv = input()
+    if rv == 'Y':
+        print('[INFO] : will delete existing directory', out_dir)
+        import shutil
+        shutil.rmtree(out_dir, ignore_errors=True)
+    else:
+        print('[ERROR] : folder', out_dir, 'already exists, and will not be deleted')
+        raise RuntimeError ('Folder exists')
+
 if not os.path.isdir(out_dir+'/'+config_subdir+'/'+categs_subdir):
     print('[INFO] creating folders', out_dir+'/'+config_subdir+'/'+categs_subdir)
     os.makedirs(out_dir+'/'+config_subdir+'/'+categs_subdir)

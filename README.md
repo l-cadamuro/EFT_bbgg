@@ -54,7 +54,15 @@ Most of the methods of quickstats are taken from [this tutorial](https://gitlab.
 
 To make the scan with quickstats: use the ``limit_scan`` command and then plot the results with ``make_EFT_limit_scan.py`` . The script ``make_all_limits_scans.sh`` lists the commands for the generation and plotting of the data.
 
+### HEFT benchmark limits
+
+To make the scan with quickstats: use the ``cls_limit`` command for each benchmark and then plot the aggregated result with ``make_EFT_benchmarks.py`` . The script ``make_all_benchmarks.sh`` contains the benchmark definition, the commands to run each limit, and the call to the plotting code.
+
 ### Likelihood scan
 
 First you need to generate the Asimov dataset (``quickstats generate_asimov``), and then you can fit it with ``quickstats likelihood_scan`` and plot with ``make_likelihood_scan.py``.
 The script ``make_all_likelihood_scans.sh`` lists the commands for the generation and plotting of the data.
+
+### 2D likelihood scan
+
+Same as above, but scanning two POIs at the same time. All commands in the script ``make_all_2D_likelihood_scans.sh``

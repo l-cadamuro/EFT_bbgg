@@ -30,31 +30,49 @@ files = {
     'BSM_3' : '../../inputNtuples/HHbbyy_cHHH01d0_BSM_3.root',
     'BSM_4' : '../../inputNtuples/HHbbyy_cHHH01d0_BSM_4.root',
 }
-foutname = 'fractions_SM_for_EFT.txt'
-dboutname = 'fractions_SM_for_EFT.pkl'
 
 treename = 'output'
 mhh_branch_name = 'truth_m_hh'
 weight_branch_name = 'total_weight'
 
-# root [9] hw->Integral()
-# (double) 0.26072346
-# root [10] htw->Integral()
-# (double) 0.25511009
+##################################################
 
+# # old binning (PUB note)
+# mHH_bins = [
+#     250., 270.,290.,310.,330.,350.,370.,390.,
+#     410.,430.,450.,470.,490.,
+#     510.,530.,550.,570.,590.,
+#     610.,630.,650.,670.,690.,
+#     710.,730.,750.,770.,790.,
+#     810.,830.,850.,870.,890.,
+#     910.,930.,950.,970.,990.,
+#     1010.,1030.
+# ]
+# mHH_bins = [x - 10. for x in mHH_bins] # because the values from the coeffs are expressed as center, so shfit it by 1/2 bin width
+# foutname = 'fractions_SM_for_EFT.txt'
+# dboutname = 'fractions_SM_for_EFT.pkl'
+
+##################################################
+
+# new binning (from Tom)
 mHH_bins = [
-    250., 270.,290.,310.,330.,350.,370.,390.,
-    410.,430.,450.,470.,490.,
-    510.,530.,550.,570.,590.,
-    610.,630.,650.,670.,690.,
-    710.,730.,750.,770.,790.,
-    810.,830.,850.,870.,890.,
-    910.,930.,950.,970.,990.,
-    1010.,1030.
-]
+    250.,   270.,   290.,   310.,   330.,   350.,   370.,   390.,
+    410.,   430.,   450.,   470.,   490.,   510.,   530.,   550.,
+    570.,   590.,   610.,   630.,   650.,   670.,   690.,   710.,
+    730.,   750.,   770.,   790.,   810.,   830.,   850.,   870.,
+    890.,   910.,   930.,   950.,   970.,   990.,  1010.,  1030.,
+    1050.,  1200.,  1400.]
+mHH_bins = mHH_bins[:-1] # remove last edge, because for mHH > 1400 we use the values in bin [1200, 1400], so effectively we habe a single bin mHH > 1200
+foutname = 'fractions_SM_for_EFT_newBinning.txt'
+dboutname = 'fractions_SM_for_EFT_newBinning.pkl'
+
+##################################################
 
 output_data = {}
 evt_counts = {}
+
+print('[INFO] : considering a binning of', len(mHH_bins), 'bins :')
+print('       : ', mHH_bins)
 
 for c in categs:
     print ('... reading categ', c, 'from file', files[c])

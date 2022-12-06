@@ -1,10 +1,26 @@
 import pickle
 import os
 import shutil 
-## load fractions
-read_data = pickle.load( open( 'fractions_SM_for_EFT.pkl', "rb" ) )
+
+### same binning and coefficients as previous PUB note
+# yieldfile = 'fractions_SM_for_EFT.pkl'
+# coeff_file_name = 'coeff_files/NLO-Ais-13TeV.txt'
+# out_dir = "../EFT_workspaces"
+
+### new binning and new coefficients from Tom
+yieldfile = 'fractions_SM_for_EFT_newBinning.pkl'
+coeff_file_name = 'coeff_files/HEFT_coeffs_updated/muR_muF_1/HEFT_dA_and_A_with_Binning_250_1050_41_Variable_Bins_1200_1400_muR_muF_1.txt'
+out_dir = "../EFT_workspaces_newCoeffs"
+
+# read_data = pickle.load( open( 'fractions_SM_for_EFT.pkl', "rb" ) )
+# read_data = pickle.load( open( 'fractions_SM_for_EFT_newBinning.pkl', "rb" ) )
+read_data = pickle.load( open( yieldfile, "rb" ) )
 mHH_bins = read_data['mHH_bins']
 yields   = read_data['yields']
+
+print('[INFO] : input yield file', yieldfile)
+print('       : read ', len(mHH_bins), 'input mHH bins')
+print('       : read ', len(yields), 'yield entries')
 
 # mHH_bins = [
 #     250., 270.,290.,310.,330.,350.,370.,390.,
@@ -43,7 +59,8 @@ cards = {
 master_card = f'{path_to}/config/input_non_param.xml'
 
 # as input workspaces are indexed from 'config', keep in the destination structure, and run ws creation from above
-out_dir = "../EFT_workspaces"
+# out_dir = "../EFT_workspaces"
+# out_dir = "../EFT_workspaces_newCoeffs"
 config_subdir = 'config'
 categs_subdir = "categories"
 
@@ -72,13 +89,26 @@ if not os.path.isdir(out_dir+'/'+config_subdir+'/'+categs_subdir):
 
 # the descritpion of the polynomial (prototype string)
 from HEFT_poly import poly_form, read_coeffs_ATLAS
-mhh_bins_files, coeffs, last_line = read_coeffs_ATLAS('coeff_files/NLO-Ais-13TeV.txt', 23)
+# mhh_bins_files, coeffs, inclusive_Ais = read_coeffs_ATLAS('coeff_files/NLO-Ais-13TeV.txt', 23)
+# mhh_bins_files, coeffs, inclusive_Ais = read_coeffs_ATLAS('coeff_files/HEFT_coeffs_updated/muR_muF_1/HEFT_dA_and_A_with_Binning_250_1050_41_Variable_Bins_1200_1400_muR_muF_1.txt', 23)
 
-if mhh_bins_files != mHH_bins:
-    print('WARNING!!! coeffs read out and mHH_bins do not match! ', len(mHH_bins), len(mhh_bins_files))
-    for i in range(len(mhh_bins_files)):
-        print(mHH_bins[i], mhh_bins_files[i])
-    raise RuntimeError('CHECK BINNING')
+mhh_bins_files, coeffs, inclusive_Ais = read_coeffs_ATLAS(coeff_file_name, 23)
+
+print('... Read coeffs files : ', len(coeffs), 'coeffs')
+
+## The binning read from the Ai files cannot be directly compared here since the file reports the bin center and not the bin edges ...
+# if mhh_bins_files != mHH_bins:
+#     print('WARNING!!! coeffs read out and mHH_bins do not match! ', len(mHH_bins), len(mhh_bins_files))
+#     print(" from Ai file : ", mhh_bins_files)
+#     print(" from input yields : ", mHH_bins)
+#     for i in range(len(mhh_bins_files)):
+#         print(mHH_bins[i], mhh_bins_files[i])
+#     raise RuntimeError('CHECK BINNING')
+
+## ... so just check that the number of bins matches
+if len(mHH_bins) != len(coeffs):
+    print('ERROR! There is a mismatch between the number of mHH bins (used for yields) and the number of coefficients')
+    print('num. of mHH bins:', len(mHH_bins), ' != num of coefficients', len(coeffs))
 
 ####################################################
 ## keys: strings in poly_form 'ctth','ctthh','cgghh','cggh','chhh',

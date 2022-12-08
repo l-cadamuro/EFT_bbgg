@@ -6,17 +6,33 @@ import shutil
 # yieldfile = 'fractions_SM_for_EFT.pkl'
 # coeff_file_name = 'coeff_files/NLO-Ais-13TeV.txt'
 # out_dir = "../EFT_workspaces"
+# EFT_type = 'HEFT'
+
+### just testing new modifs
+yieldfile = 'fractions_SM_for_EFT.pkl'
+coeff_file_name = 'coeff_files/NLO-Ais-13TeV.txt'
+out_dir = "../EFT_workspaces_MOD"
+EFT_type = 'HEFT'
 
 ### new binning and new coefficients from Tom
-yieldfile = 'fractions_SM_for_EFT_newBinning.pkl'
-coeff_file_name = 'coeff_files/HEFT_coeffs_updated/muR_muF_1/HEFT_dA_and_A_with_Binning_250_1050_41_Variable_Bins_1200_1400_muR_muF_1.txt'
-out_dir = "../EFT_workspaces_newCoeffs"
+# yieldfile = 'fractions_SM_for_EFT_newBinning.pkl'
+# coeff_file_name = 'coeff_files/HEFT_coeffs_updated/muR_muF_1/HEFT_dA_and_A_with_Binning_250_1050_41_Variable_Bins_1200_1400_muR_muF_1.txt'
+# out_dir = "../EFT_workspaces_newCoeffs"
+# EFT_type = 'HEFT'
+
+# ### for SMEFT
+# yieldfile = 'fractions_SM_for_EFT.pkl'
+# coeff_file_name = 'coeff_files/Weights_20_GeV_Bins.txt'
+# out_dir = "../SMEFT_workspaces"
+# EFT_type = 'SMEFT' # HEFT, SMEFT
 
 # read_data = pickle.load( open( 'fractions_SM_for_EFT.pkl', "rb" ) )
 # read_data = pickle.load( open( 'fractions_SM_for_EFT_newBinning.pkl', "rb" ) )
 read_data = pickle.load( open( yieldfile, "rb" ) )
 mHH_bins = read_data['mHH_bins']
 yields   = read_data['yields']
+
+print('[INFO] : doing EFT:', EFT_type)
 
 print('[INFO] : input yield file', yieldfile)
 print('       : read ', len(mHH_bins), 'input mHH bins')
@@ -87,12 +103,81 @@ if not os.path.isdir(out_dir+'/'+config_subdir+'/'+categs_subdir):
     print('[INFO] creating folders', out_dir+'/'+config_subdir+'/'+categs_subdir)
     os.makedirs(out_dir+'/'+config_subdir+'/'+categs_subdir)
 
-# the descritpion of the polynomial (prototype string)
-from HEFT_poly import poly_form, read_coeffs_ATLAS
-# mhh_bins_files, coeffs, inclusive_Ais = read_coeffs_ATLAS('coeff_files/NLO-Ais-13TeV.txt', 23)
-# mhh_bins_files, coeffs, inclusive_Ais = read_coeffs_ATLAS('coeff_files/HEFT_coeffs_updated/muR_muF_1/HEFT_dA_and_A_with_Binning_250_1050_41_Variable_Bins_1200_1400_muR_muF_1.txt', 23)
+if EFT_type == "HEFT":
+    # the descritpion of the polynomial (prototype string)
+    from HEFT_poly import poly_form, read_coeffs_ATLAS
+    # mhh_bins_files, coeffs, inclusive_Ais = read_coeffs_ATLAS('coeff_files/NLO-Ais-13TeV.txt', 23)
+    # mhh_bins_files, coeffs, inclusive_Ais = read_coeffs_ATLAS('coeff_files/HEFT_coeffs_updated/muR_muF_1/HEFT_dA_and_A_with_Binning_250_1050_41_Variable_Bins_1200_1400_muR_muF_1.txt', 23)
+    mhh_bins_files, coeffs, inclusive_Ais = read_coeffs_ATLAS(coeff_file_name, 23)
 
-mhh_bins_files, coeffs, inclusive_Ais = read_coeffs_ATLAS(coeff_file_name, 23)
+    ####################################################
+    poi_list = ['chhh', 'ctth', 'ctthh', 'cggh', 'cgghh']
+
+    ## keys: strings in poly_form 'ctth','ctthh','cgghh','cggh','chhh',
+    ## values : name of the POIs to be created for the workspace
+    poi_names = {
+        'ctth'  : 'ctth',
+        'ctthh' : 'ctthh',
+        'cgghh' : 'cgghh',
+        'cggh'  : 'cggh',
+        'chhh'  : 'chhh'
+    }
+
+    # defined as in ROOFIT: start, min, max
+    poi_ranges = {
+        'ctth'  : '1, -20, 20',
+        'ctthh' : '1, -20, 20',
+        'cgghh' : '0, -20, 20',
+        'cggh'  : '0, -20, 20',
+        'chhh'  : '0, -20, 20'
+    }
+
+    SM_vals = {
+        'ctth'  : 1,
+        'ctthh' : 0,
+        'cgghh' : 0,
+        'cggh'  : 0,
+        'chhh'  : 1, 
+    }
+
+
+elif EFT_type == "SMEFT":
+    from SMEFT_poly import poly_form, read_coeffs_ATLAS
+    # mhh_bins_files, coeffs, inclusive_Ais = read_coeffs_ATLAS('coeff_files/NLO-Ais-13TeV.txt', 23)
+    # mhh_bins_files, coeffs, inclusive_Ais = read_coeffs_ATLAS('coeff_files/HEFT_coeffs_updated/muR_muF_1/HEFT_dA_and_A_with_Binning_250_1050_41_Variable_Bins_1200_1400_muR_muF_1.txt', 23)
+    mhh_bins_files, coeffs, inclusive_Ais = read_coeffs_ATLAS(coeff_file_name, 21)
+
+    ####################################################
+    ## keys: strings in poly_form
+    ## values : name of the POIs to be created for the workspace
+
+    poi_list = ['cdp', 'cp', 'ctp', 'ctG', 'cpg']
+
+    poi_names = {
+        'cdp'  : 'cdp',
+        'cp'   : 'cp',
+        'ctp'  : 'ctp',
+        'ctG'  : 'ctG',
+        'cpg'  : 'cpg'
+    }
+
+    # defined as in ROOFIT: start, min, max
+    poi_ranges = {
+        'cdp'  : '0, -10, 10',
+        'cp'   : '0, -10, 10',
+        'ctp'  : '0, -10, 10',
+        'ctG'  : '0, -10, 10',
+        'cpg'  : '0, -10, 10'
+    }
+
+    SM_vals = {
+        'cdp'  : 0,
+        'cp'   : 0,
+        'ctp'  : 0,
+        'ctG'  : 0,
+        'cpg'  : 0, 
+    }
+
 
 print('... Read coeffs files : ', len(coeffs), 'coeffs')
 
@@ -110,25 +195,6 @@ if len(mHH_bins) != len(coeffs):
     print('ERROR! There is a mismatch between the number of mHH bins (used for yields) and the number of coefficients')
     print('num. of mHH bins:', len(mHH_bins), ' != num of coefficients', len(coeffs))
 
-####################################################
-## keys: strings in poly_form 'ctth','ctthh','cgghh','cggh','chhh',
-## values : name of the POIs to be created for the workspace
-poi_names = {
-    'ctth'  : 'ctth',
-    'ctthh' : 'ctthh',
-    'cgghh' : 'cgghh',
-    'cggh'  : 'cggh',
-    'chhh'  : 'chhh'
-}
-
-# defined as in ROOFIT: start, min, max
-poi_ranges = {
-    'ctth'  : '1, -20, 20',
-    'ctthh' : '1, -20, 20',
-    'cgghh' : '0, -20, 20',
-    'cggh'  : '0, -20, 20',
-    'chhh'  : '0, -20, 20'
-}
 
 def format_poly(poly_form, Ai, poi_names):
     Ai_dict = {"A"+str(i+1) : Ai[i] for i in range(len(Ai))}
@@ -139,13 +205,7 @@ def format_poly(poly_form, Ai, poi_names):
 ####################################################
 # compute SM values for normalization
 print('... computing SM normalizations per bin')
-SM_vals = {
-    'ctth'  : 1,
-    'ctthh' : 0,
-    'cgghh' : 0,
-    'cggh'  : 0,
-    'chhh'  : 1, 
-}
+
 SM_yields = {}
 for ibin, mHH in enumerate(mHH_bins):
     s = format_poly(poly_form, coeffs[ibin], poi_names)
@@ -179,13 +239,17 @@ for categ in categs:
         if istart >= 0 and '</Sample>' in l: # first occurrence of a new sample after istart
             istop = i
             break
-    POIs_lines = [
-        '  <Item Name="{}[{}]"/>\n'.format(poi_names['chhh'] , poi_ranges['chhh']),
-        '  <Item Name="{}[{}]"/>\n'.format(poi_names['ctth'] , poi_ranges['ctth']),
-        '  <Item Name="{}[{}]"/>\n'.format(poi_names['ctthh'], poi_ranges['ctthh']),
-        '  <Item Name="{}[{}]"/>\n'.format(poi_names['cggh'] , poi_ranges['cggh']),
-        '  <Item Name="{}[{}]"/>\n'.format(poi_names['cgghh'], poi_ranges['cgghh']),
-    ]
+    # POIs_lines = [
+    #     '  <Item Name="{}[{}]"/>\n'.format(poi_names['chhh'] , poi_ranges['chhh']),
+    #     '  <Item Name="{}[{}]"/>\n'.format(poi_names['ctth'] , poi_ranges['ctth']),
+    #     '  <Item Name="{}[{}]"/>\n'.format(poi_names['ctthh'], poi_ranges['ctthh']),
+    #     '  <Item Name="{}[{}]"/>\n'.format(poi_names['cggh'] , poi_ranges['cggh']),
+    #     '  <Item Name="{}[{}]"/>\n'.format(poi_names['cgghh'], poi_ranges['cgghh']),
+    # ]
+    # generates the list of POIs to be inserted in the workspace
+    POIs_lines = ['  <Item Name="{}[{}]"/>\n'.format(poi_names[pname] , poi_ranges[pname]) for pname in poi_list]
+    POIs_string = ','.join(['{%s}'%pname for pname in poi_list]) # {chhh},{ctth},{ctthh},{cggh},{cgghh}
+    POI_dict = {poi_list[ipoi] : '@%i' % ipoi for ipoi in range(len(poi_list))} # {'chhh':'@0', 'ctth':'@1', 'ctthh':'@2', 'cggh':'@3', 'cgghh':'@4'}
 
     if i_firstSample < istart:
         new_card = all_lines[0:i_firstSample] + POIs_lines + all_lines[i_firstSample:istart] # insert POIs here
@@ -207,7 +271,8 @@ for categ in categs:
                 '    <NormFactor Name="mu_XS_HH_{categ}[1]" />\n',
                 '    <NormFactor Name="mu_XS_{categ}[1]" />\n',
                 '    <NormFactor Name="mu[1]" />\n',
-                '    <NormFactor Name="expr::{polyname}(\'({polyfunc})/{SMnorm}\',{chhh},{ctth},{ctthh},{cggh},{cgghh})"/>\n'
+                # '    <NormFactor Name="expr::{polyname}(\'({polyfunc})/{SMnorm}\',{chhh},{ctth},{ctthh},{cggh},{cgghh})"/>\n'
+                '    <NormFactor Name="expr::{polyname}(\'({polyfunc})/{SMnorm}\',%s)"/>\n' % POIs_string,
                 '  </Sample>\n',
             ]
             formatdata = {
@@ -216,7 +281,8 @@ for categ in categs:
                 'evtyield' : yields[categ][mHH],
                 'polyname' : f'poly{mHH_int}',
                 'SMnorm'   : SM_yields[mHH],
-                'polyfunc' : format_poly(poly_form, coeffs[ibin], {'chhh':'@0', 'ctth':'@1', 'ctthh':'@2', 'cggh':'@3', 'cgghh':'@4'})
+                # 'polyfunc' : format_poly(poly_form, coeffs[ibin], {'chhh':'@0', 'ctth':'@1', 'ctthh':'@2', 'cggh':'@3', 'cgghh':'@4'})
+                'polyfunc' : format_poly(poly_form, coeffs[ibin], POI_dict)
             }
             formatdata = {**formatdata, **poi_names}
             newstrs = [x.format(**formatdata) for x in protos]
@@ -232,7 +298,8 @@ for categ in categs:
             '    <NormFactor Name="mu_XS_{categ}[1]" />\n',
             '    <NormFactor Name="mu[1]" />\n',
             # '    <NormFactor Name="expr::yield_EFT(\'({polyfunc})/{SMnorm}\',{chhh},{ctth},{ctthh},{cggh},{cgghh})"/>\n'
-            '    <NormFactor Name="expr::yield_HH_ggF_EFT(\'{polyfunc}\',{chhh},{ctth},{ctthh},{cggh},{cgghh})"/>\n'
+            # '    <NormFactor Name="expr::yield_HH_ggF_EFT(\'{polyfunc}\',{chhh},{ctth},{ctthh},{cggh},{cgghh})"/>\n'
+            '    <NormFactor Name="expr::yield_HH_ggF_EFT(\'{polyfunc}\',%s)"/>\n' % POIs_string,
             '  </Sample>\n',
         ]
         from HEFT_poly import ci_func_vector, coeffs_vector
@@ -246,7 +313,8 @@ for categ in categs:
             poly_parts.append(tot)
         formatdata = {
             'categ'    : categ,
-            'polyfunc' : format_poly(poly_form, poly_parts, {'chhh':'@0', 'ctth':'@1', 'ctthh':'@2', 'cggh':'@3', 'cgghh':'@4'})
+            # 'polyfunc' : format_poly(poly_form, poly_parts, {'chhh':'@0', 'ctth':'@1', 'ctthh':'@2', 'cggh':'@3', 'cgghh':'@4'})
+            'polyfunc' : format_poly(poly_form, poly_parts, POI_dict)
         }
         formatdata = {**formatdata, **poi_names}
         newstrs = [x.format(**formatdata) for x in protos]
@@ -290,7 +358,10 @@ for l in all_lines:
         new_card.append(newl)
     # update the default setup of the model
     elif '<Asimov' in l and 'Name="setup"' in l and 'Setup="' in l:
-        newl = l.replace('Setup="', 'Setup="{n_chhh}=1,{n_ctth}=1,{n_cgghh}=0,{n_cggh}=0,{n_ctthh}=0,'.format(n_chhh=poi_names['chhh'], n_ctth=poi_names['ctth'], n_cgghh=poi_names['cgghh'], n_cggh=poi_names['cggh'], n_ctthh=poi_names['ctthh']))
+        setup_cmd = ','.join(['%s=%.0f' % (poiname, SM_vals[poiname]) for poiname in poi_list])
+        setup_str = 'Setup="{},'.format(setup_cmd)
+        # newl = l.replace('Setup="', 'Setup="{n_chhh}=1,{n_ctth}=1,{n_cgghh}=0,{n_cggh}=0,{n_ctthh}=0,'.format(n_chhh=poi_names['chhh'], n_ctth=poi_names['ctth'], n_cgghh=poi_names['cgghh'], n_cggh=poi_names['cggh'], n_ctthh=poi_names['ctthh']))
+        newl = l.replace('Setup="', setup_str)
         new_card.append(newl)
     else:
         new_card.append(l)

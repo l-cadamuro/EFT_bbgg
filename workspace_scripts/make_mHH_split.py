@@ -37,7 +37,7 @@ weight_branch_name = 'total_weight'
 
 ##################################################
 
-# # old binning (PUB note)
+# # old binning (PUB note HEFT, SMEFT results)
 # mHH_bins = [
 #     250., 270.,290.,310.,330.,350.,370.,390.,
 #     410.,430.,450.,470.,490.,

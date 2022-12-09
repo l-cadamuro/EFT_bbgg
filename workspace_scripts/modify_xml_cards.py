@@ -8,23 +8,17 @@ import shutil
 # out_dir = "../EFT_workspaces"
 # EFT_type = 'HEFT'
 
-### just testing new modifs
-yieldfile = 'fractions_SM_for_EFT.pkl'
-coeff_file_name = 'coeff_files/NLO-Ais-13TeV.txt'
-out_dir = "../EFT_workspaces_MOD"
-EFT_type = 'HEFT'
-
 ### new binning and new coefficients from Tom
 # yieldfile = 'fractions_SM_for_EFT_newBinning.pkl'
 # coeff_file_name = 'coeff_files/HEFT_coeffs_updated/muR_muF_1/HEFT_dA_and_A_with_Binning_250_1050_41_Variable_Bins_1200_1400_muR_muF_1.txt'
 # out_dir = "../EFT_workspaces_newCoeffs"
 # EFT_type = 'HEFT'
 
-# ### for SMEFT
-# yieldfile = 'fractions_SM_for_EFT.pkl'
-# coeff_file_name = 'coeff_files/Weights_20_GeV_Bins.txt'
-# out_dir = "../SMEFT_workspaces"
-# EFT_type = 'SMEFT' # HEFT, SMEFT
+### for SMEFT
+yieldfile = 'fractions_SM_for_EFT.pkl'
+coeff_file_name = 'coeff_files/Weights_20_GeV_Bins.txt'
+out_dir = "../SMEFT_workspaces"
+EFT_type = 'SMEFT' # HEFT, SMEFT
 
 # read_data = pickle.load( open( 'fractions_SM_for_EFT.pkl', "rb" ) )
 # read_data = pickle.load( open( 'fractions_SM_for_EFT_newBinning.pkl', "rb" ) )
@@ -178,6 +172,9 @@ elif EFT_type == "SMEFT":
         'cpg'  : 0, 
     }
 
+else:
+    raise RuntimeError("EFT type not valid")
+
 
 print('... Read coeffs files : ', len(coeffs), 'coeffs')
 
@@ -302,7 +299,12 @@ for categ in categs:
             '    <NormFactor Name="expr::yield_HH_ggF_EFT(\'{polyfunc}\',%s)"/>\n' % POIs_string,
             '  </Sample>\n',
         ]
-        from HEFT_poly import ci_func_vector, coeffs_vector
+        if EFT_type == 'HEFT':
+            from HEFT_poly import ci_func_vector, coeffs_vector
+        elif EFT_type == 'SMEFT':
+            from SMEFT_poly import ci_func_vector, coeffs_vector
+        else:
+            raise RuntimeError("EFT type not valid")
 
         poly_parts = []
         for ifunc, func in enumerate(ci_func_vector): # looping on each "piece" of the polynomial

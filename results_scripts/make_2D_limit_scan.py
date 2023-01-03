@@ -9,11 +9,14 @@ python3 make_2D_limit_scan.py --input chhh_cgghh_course/limits.json --xpoi chhh 
 python3 make_2D_limit_scan.py --input cgghh_ctthh_course/limits.json --xpoi cgghh --ypoi ctthh
 """
 
+import seaborn as sns
+from matplotlib.colors import LogNorm
 import matplotlib.pyplot as plt
 import json
 import pandas as pd
 import numpy as np
 import mplhep as hep 
+plt.style.use(hep.style.ATLAS) 
 
 import argparse
 
@@ -61,23 +64,19 @@ y_scan = np.unique(y_data)
 nx = x_scan.shape[0]
 ny = y_scan.shape[0]
 
-import seaborn as sns
-from matplotlib.colors import LogNorm
-
-plt.style.use(hep.style.ATLAS) 
-
 cmap = "viridis"
 fig, ax = plt.subplots()
-hep.atlas.text("Preliminary")
 table = df.pivot(args.ypoi, args.xpoi, '0')
 
 ax = sns.heatmap(table, cmap=cmap, norm=LogNorm(), cbar_kws={'label': r'Expected 95% CL median upper limit [$\frac{\sigma}{\sigma_{SM}}$]'})
+hep.atlas.text("Preliminary")
 ax.invert_yaxis()
 
-ax.set_xlabel(poi_names[args.xpoi])
-ax.set_ylabel(poi_names[args.ypoi])
+#ax.set_xlabel(poi_names[args.xpoi])
+#ax.set_ylabel(poi_names[args.ypoi])
 
 oname = args.output.format(xpoi=args.xpoi, ypoi=args.ypoi, cmap=cmap)
+fig.tight_layout()
 fig.savefig(oname)
 fig.savefig(oname.replace('.pdf', '.png'))
 

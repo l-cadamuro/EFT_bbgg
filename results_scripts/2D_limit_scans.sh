@@ -1,10 +1,13 @@
 WSpath="../EFT_workspaces/workspace/WS-bbyy-non-resonant_non_param.root"
 
-#quickstats limit_scan -i ${WSpath} --param_expr "chhh=-10_10_0.5,ctthh=-3_3_0.5" --poi mu_XS_HH --outdir chhh_ctthh_course  --outname limits.json --blind 
-#quickstats limit_scan -i ${WSpath} --param_expr "chhh=-10_10_0.5,cgghh=-5_5_0.5" --poi mu_XS_HH --outdir chhh_cgghh_course  --outname limits.json --blind 
-#quickstats limit_scan -i ${WSpath} --param_expr "cgghh=-5_5_0.5,ctthh=-3_3_0.5" --poi mu_XS_HH --outdir cgghh_ctthh_course  --outname limits.json --blind 
 
-quickstats limit_scan -i ${WSpath} --param_expr "chhh=7.1_10_0.1,ctthh=-3_3_0.1" --poi mu_XS_HH --outdir chhh_ctthh  --outname limits.json --blind --cache 
+# Course binning of parameters
+quickstats limit_scan -i ${WSpath} --param_expr "chhh=-10_10_0.5,ctthh=-3_3_0.5" --poi mu_XS_HH --outdir chhh_ctthh_course  --outname limits.json --blind 
+quickstats limit_scan -i ${WSpath} --param_expr "chhh=-10_10_0.5,cgghh=-5_5_0.5" --poi mu_XS_HH --outdir chhh_cgghh_course  --outname limits.json --blind 
+quickstats limit_scan -i ${WSpath} --param_expr "cgghh=-5_5_0.5,ctthh=-3_3_0.5" --poi mu_XS_HH --outdir cgghh_ctthh_course  --outname limits.json --blind 
+
+# Finer binning
+#quickstats limit_scan -i ${WSpath} --param_expr "chhh=-10_10_0.1,ctthh=-3_3_0.1" --poi mu_XS_HH --outdir chhh_ctthh  --outname limits.json --blind --cache 
 #quickstats limit_scan -i ${WSpath} --param_expr "chhh=-10_10_0.1,cgghh=-5_5_0.1" --poi mu_XS_HH --outdir chhh_cgghh  --outname limits.json --blind 
 #quickstats limit_scan -i ${WSpath} --param_expr "cgghh=-5_5_0.1,ctthh=-3_3_0.1" --poi mu_XS_HH --outdir cgghh_ctthh  --outname limits.json --blind 
 

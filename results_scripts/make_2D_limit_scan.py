@@ -7,6 +7,7 @@ Example usage:
 python3 make_2D_limit_scan.py --input chhh_ctthh_course/limits.json --xpoi chhh --ypoi ctthh
 python3 make_2D_limit_scan.py --input chhh_cgghh_course/limits.json --xpoi chhh --ypoi cgghh
 python3 make_2D_limit_scan.py --input cgghh_ctthh_course/limits.json --xpoi cgghh --ypoi ctthh
+python3 make_2D_limit_scan.py --input ctth_cggh/limits.json --xpoi ctth --ypoi cggh
 """
 
 import seaborn as sns
@@ -16,7 +17,7 @@ import json
 import pandas as pd
 import numpy as np
 import mplhep as hep 
-plt.style.use(hep.style.ATLAS) 
+plt.style.use(hep.style.ATLAS)  # https://github.com/scikit-hep/mplhep/blob/4534ba9df742154b9f5c279e549e260b8e3fe43e/src/mplhep/label.py
 
 import argparse
 
@@ -66,14 +67,29 @@ ny = y_scan.shape[0]
 
 cmap = "viridis"
 fig, ax = plt.subplots()
+
+#print("df:",df)
+#print("df['0']:",df['0'])
+
+SM_XS = 31.05 
+
+df['0'] = df['0']*SM_XS
+
+print("Multiplying limit values by: ",SM_XS)
+
 table = df.pivot(args.ypoi, args.xpoi, '0')
 
-ax = sns.heatmap(table, cmap=cmap, norm=LogNorm(), cbar_kws={'label': r'Expected 95% CL median upper limit [$\frac{\sigma}{\sigma_{SM}}$]'})
+ax = sns.heatmap(table, cmap=cmap, norm=LogNorm(), cbar_kws={'label': r'Expected 95% CL median upper limit [fb]'})
+#ax = sns.heatmap(table, cmap=cmap, norm=LogNorm(), cbar_#kws={'label': r'Expected 95% CL median upper limit [$\frac{\sigma}{\sigma_{SM}}$]'})
 hep.atlas.text("Preliminary")
+hep.atlas.label(data=True, lumi=139)
+
+#hep.
+
 ax.invert_yaxis()
 
-#ax.set_xlabel(poi_names[args.xpoi])
-#ax.set_ylabel(poi_names[args.ypoi])
+hep.atlas.set_xlabel(poi_names[args.xpoi])
+hep.atlas.set_ylabel(poi_names[args.ypoi])
 
 oname = args.output.format(xpoi=args.xpoi, ypoi=args.ypoi, cmap=cmap)
 fig.tight_layout()

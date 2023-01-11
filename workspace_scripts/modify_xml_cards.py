@@ -157,11 +157,11 @@ elif EFT_type == "SMEFT":
 
     # defined as in ROOFIT: start, min, max
     poi_ranges = {
-        'cdp'  : '0, -10, 10',
-        'cp'   : '0, -10, 10',
-        'ctp'  : '0, -10, 10',
+        'cdp'  : '0, -30, 30',
+        'cp'   : '0, -30, 30',
+        'ctp'  : '0, -30, 30',
         'ctG'  : '0, -10, 10',
-        'cpg'  : '0, -10, 10'
+        'cpg'  : '0, -5, 5'
     }
 
     SM_vals = {

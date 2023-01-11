@@ -21,6 +21,12 @@ poi_names = {
     'cgghh' : '$c_{gghh}$',
     'cggh'  : '$c_{ggh}$',
     'ctthh' : '$c_{tthh}$',
+    ######
+    'cdp'   : r'$c_{H,box}$',
+    'cp'    : r'$C_{H}$',
+    'ctp'   : r'$c_{tH}$',
+    'ctG'   : r'$c_{tG}$',
+    'cpg'   : r'$c_{HG}$',
 }
 
 ### drop first point - it's the min not ordered

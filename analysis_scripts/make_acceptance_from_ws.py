@@ -1,6 +1,9 @@
 # python make_acceptance_from_ws.py --i EFT_workspaces/workspace/WS-bbyy-non-resonant-non-param.root --poi chhh
 # for p in chhh cggh cgghh ctthh ctth; do python  make_acceptance_from_ws.py --i EFT_workspaces/workspace/WS-bbyy-non-resonant-non-param.root --poi $p ; done
 
+# source RooWorkspaceExtensions, then quickstats 
+# example usage: python3 make_acceptance_from_ws.py --input ../EFT_workspaces/workspace/WS-bbyy-non-resonant_non_param.root --poi chhh --impl-type merged_yields
+
 import ROOT
 import argparse
 
@@ -15,6 +18,7 @@ parser.add_argument('--x-step', default=100, help="scanned poi range - number of
 parser.add_argument('--do-yield', dest='do_eff', default=True, help="plot the absolute yield instead of acceptance (default: plot acceptance)", action='store_false')
 parser.add_argument('--smeft', dest='do_heft', default=True, help="Do calculations for SMEFT (default is for HEFT)", action='store_false')
 parser.add_argument('--export', dest="export", default=None, help='export file of plotted data')
+parser.add_argument('--verbose', dest='verbose', default=False, help="Extra printout statements", action='store_true')
 parser.add_argument('--other-pois', default=None,
                         metavar="KEY=VALUE",
                         nargs='+',
@@ -26,6 +30,7 @@ parser.add_argument('--other-pois', default=None,
                     )
 
 args = parser.parse_args()
+verbose = args.verbose 
 
 if args.do_heft:
     pois = ['chhh', 'ctth', 'cgghh', 'cggh', 'ctthh']
@@ -213,6 +218,9 @@ for sp in scan_points:
     for c in categs:
         if args.impl_type == 'split_signals':
             yields[sp][c] = {}
+            if(verbose):
+                print("[INFO] : mHH_bins:",mHH_bins)
+                print("[INFO] : yields:",yields)
             for m in mHH_bins:
                 yields[sp][c][m] = yields_funcs[c][m].getVal()
         elif args.impl_type == 'merged_yields':
@@ -347,9 +355,13 @@ else:
     print(f'[INFO] : plotting total yield')
     denom_scale = np.ones(len(scan_points))
 
-
 import matplotlib.pyplot as plt
 
+if(verbose):
+    print("[INFO] : scan_points:",scan_points)
+    print("[INFO] : categs:",categs)
+
+if(verbose): print("[INFO] : Creating figure and axes with pyplot...")
 fig, axs = plt.subplots(2) # this has a small conflict with ROOFIT and raises a warning about "the smallest subnormal for <class 'numpy.float64'> type is zero" that can be ignored
 # axs = [axs,] # so easier to index more after
 

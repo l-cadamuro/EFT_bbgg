@@ -1,6 +1,9 @@
 # python make_acceptance_from_ws.py --i EFT_workspaces/workspace/WS-bbyy-non-resonant-non-param.root --poi chhh
 # for p in chhh cggh cgghh ctthh ctth; do python  make_acceptance_from_ws.py --i EFT_workspaces/workspace/WS-bbyy-non-resonant-non-param.root --poi $p ; done
 
+# source RooWorkspaceExtensions, then quickstats 
+# example usage: python3 make_acceptance_from_ws.py --input ../EFT_workspaces/workspace/WS-bbyy-non-resonant_non_param.root --poi chhh --impl-type merged_yields
+
 import ROOT
 import argparse
 
@@ -213,6 +216,8 @@ for sp in scan_points:
     for c in categs:
         if args.impl_type == 'split_signals':
             yields[sp][c] = {}
+            print("mHH_bins:",mHH_bins)
+            print("yields:",yields)
             for m in mHH_bins:
                 yields[sp][c][m] = yields_funcs[c][m].getVal()
         elif args.impl_type == 'merged_yields':
@@ -347,9 +352,12 @@ else:
     print(f'[INFO] : plotting total yield')
     denom_scale = np.ones(len(scan_points))
 
-
 import matplotlib.pyplot as plt
 
+print("scan_points:",scan_points)
+print("categs:",categs)
+
+print("Creating figure and axes with pyplot...")
 fig, axs = plt.subplots(2) # this has a small conflict with ROOFIT and raises a warning about "the smallest subnormal for <class 'numpy.float64'> type is zero" that can be ignored
 # axs = [axs,] # so easier to index more after
 

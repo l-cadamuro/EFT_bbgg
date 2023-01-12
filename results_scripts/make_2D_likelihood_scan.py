@@ -12,7 +12,7 @@ parser.add_argument('--xmin', default=None, help="x min poi scan range", type=fl
 parser.add_argument('--xmax', default=None, help="x max poi scan range", type=float)
 parser.add_argument('--ymin', default=None, help="x min poi scan range", type=float)
 parser.add_argument('--ymax', default=None, help="x max poi scan range", type=float)
-parser.add_argument('--output', default='likelihood_scan_2D_{xpoi}_{ypoi}.pdf', help="output file name. Use {xpoi}, {ypoi} to replace it with pois (defaults to likelihood_scan_2D_{xpoi}_{ypoi}.pdf")
+parser.add_argument('--output', default='limit_scan_2D_{xpoi}_{ypoi}.pdf', help="output file name. Use {xpoi}, {ypoi} to replace it with pois (defaults to likelihood_scan_2D_{xpoi}_{ypoi}.pdf")
 args = parser.parse_args()
 
 data = json.load(open(args.input))
@@ -61,7 +61,8 @@ ny = y_scan.shape[0]
 import seaborn as sns
 from matplotlib.colors import LogNorm
 fig, ax = plt.subplots()
-table = df.pivot(args.ypoi, args.xpoi, 'qmu')
+#table = df.pivot(args.ypoi, args.xpoi, 'qmu')
+table = df.pivot(args.ypoi, args.xpoi, '0')
 ax = sns.heatmap(table, cmap="Blues", norm=LogNorm(), cbar_kws={'label': r'-2$\Delta\ln(L)$'})
 ax.invert_yaxis()
 

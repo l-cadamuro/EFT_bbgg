@@ -108,3 +108,31 @@ def read_coeffs_ATLAS(fname, nAi):
     bins = bins[:-1]
     data = data[:-1]
     return bins, data, last_line
+
+def poly(ctthh, cgghh, cggh, chhh, ctth, A):
+    ct = ctth
+    ctt = ctthh
+    x =   A[0]*pow(ct,4) \
+        + A[1]*pow(ctt,2) \
+        + A[2]*pow(ct,2)*pow(chhh,2) \
+        + A[3]*pow(cggh,2)*pow(chhh,2) \
+        + A[4]*pow(cgghh,2) \
+        + A[5]*ctt*pow(ct,2) \
+        + A[6]*pow(ct,3)*chhh \
+        + A[7]*ctt*ct*chhh \
+        + A[8]*ctt*cggh*chhh \
+        + A[9]*ctt*cgghh \
+        + A[10]*pow(ct,2)*cggh*chhh \
+        + A[11]*pow(ct,2)*cgghh \
+        + A[12]*ct*pow(chhh,2)*cggh \
+        + A[13]*ct*chhh*cgghh \
+        + A[14]*cggh*chhh*cgghh \
+        + A[15]*pow(ct,3)*cggh \
+        + A[16]*ct*ctt*cggh \
+        + A[17]*ct*pow(cggh,2)*chhh \
+        + A[18]*ct*cggh*cgghh \
+        + A[19]*pow(ct,2)*pow(cggh,2) \
+        + A[20]*ctt*pow(cggh,2) \
+        + A[21]*pow(cggh,3)*chhh \
+        + A[22]*pow(cggh,2)*cgghh
+    return x

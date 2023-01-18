@@ -38,8 +38,10 @@ parser.add_argument('--xmin', default=None, help="x min poi scan range", type=fl
 parser.add_argument('--xmax', default=None, help="x max poi scan range", type=float)
 parser.add_argument('--ymin', default=None, help="x min poi scan range", type=float)
 parser.add_argument('--ymax', default=None, help="x max poi scan range", type=float)
+parser.add_argument('--no-log', dest='zlog', default=True, help="do not make y axis in log scale", action='store_false')
 parser.add_argument('--output', default='limit_scan_2D_{xpoi}_{ypoi}_{cmap}.pdf', help="output file name. Use {xpoi}, {ypoi} to replace it with pois (defaults to likelihood_scan_2D_{xpoi}_{ypoi}.pdf")
 parser.add_argument('--smeft', dest='do_heft', default=True, help="Do calculations for SMEFT (default is for HEFT)", action='store_false')
+
 args = parser.parse_args()
 
 data = json.load(open(args.input))
@@ -246,7 +248,10 @@ df['0'] = df['0']*scales
 
 table = df.pivot(args.ypoi, args.xpoi, '0')
 
-ax = sns.heatmap(table, cmap=cmap, norm=LogNorm(), cbar_kws={'label': r'Expected 95% CL median upper limit [fb]'})
+if args.zlog:
+    ax = sns.heatmap(table, cmap=cmap, norm=LogNorm(), cbar_kws={'label': r'Expected 95% CL median upper limit [fb]'})
+else:
+    ax = sns.heatmap(table, cmap=cmap, cbar_kws={'label': r'Expected 95% CL median upper limit [fb]'})
 hep.atlas.text("Preliminary")
 hep.atlas.label(data=True, lumi=139)
 
